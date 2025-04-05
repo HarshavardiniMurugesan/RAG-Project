@@ -1,0 +1,5 @@
+pymupdf
+google-generativeai
+numpy
+scikit-learn
+streamlit
