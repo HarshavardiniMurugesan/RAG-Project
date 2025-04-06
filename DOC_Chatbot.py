@@ -1,4 +1,11 @@
-# IMPORTING ESSENTIALS
+"""
+------------------------RAG-Based Document Chatbot using Google Gemini and Streamlit--------------------------------
+
+This chatbot allows users to upload a single PDF document and query using Retrieval-Augmented Generation (RAG).
+It extracts text from the document, chunks it, finds relevant context, and then queries Google Gemini for responses.
+"""
+
+# -------------------------------------IMPORTING ESSENTIALS-------------------------------------------
 
 import fitz
 import google.generativeai as genai
@@ -7,26 +14,26 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
-# CONFIGURATION USING GEMINI API
+# ---------------------------------CONFIGURATION USING GEMINI API-------------------------------------
 
 genai.configure(api_key="AIzaSyD0n9mntLuB_qFPZsbPaUB8Pry2OydswLU")
 
-#  PDF TEXT EXTRACTION
+# -------------------------------------PDF TEXT EXTRACTION---------------------------------------------
 
 def extract_text_from_pdf(pdf_path):
-    # Extracts text from a given PDF file.
+    #Extracts text from a given PDF file.
     doc = fitz.open(pdf_path)
     text = "\n".join([page.get_text("text") for page in doc])
     return text
 
-# TEXT CHUNKING 
+# ----------------------------------------TEXT CHUNKING -----------------------------------------------
 
 def split_text_into_chunks(text, chunk_size=500):
     # Splits extracted text into manageable chunks for retrieval.
     words = text.split()
     return [" ".join(words[i:i + chunk_size]) for i in range(0, len(words), chunk_size)]
 
-# EMBEDDING CREATION 
+# --------------------------------------EMBEDDING CREATION ---------------------------------------------
 
 def create_embeddings(chunks):
     # Creates embeddings using TF-IDF vectorization.
@@ -34,7 +41,7 @@ def create_embeddings(chunks):
     embeddings = vectorizer.fit_transform(chunks)
     return embeddings, vectorizer
 
-# RETRIEVAL FUNCTION 
+# --------------------------------------RETRIEVAL FUNCTION ---------------------------------------------
 
 def retrieve_relevant_chunk(query, chunks, vectorizer, embeddings):
     # Finds the most relevant text chunk for a given query.
@@ -43,14 +50,14 @@ def retrieve_relevant_chunk(query, chunks, vectorizer, embeddings):
     best_match_index = np.argmax(similarities)
     return chunks[best_match_index]
 
-# GEMINI API CALL 
+# ----------------------------------------GEMINI API CALL ----------------------------------------------
 
 def ask_gemini(query, context=""):
     model = genai.GenerativeModel("gemini-1.5-pro")
     response = model.generate_content(f"Context:\n{context}\n\nQuery:\n{query}\n\nProvide a structured response.")
     return response.text
 
-# STREAMLIT UI
+# ------------------------------------------STREAMLIT UI------------------------------------------------
 
 st.title("📄 RAG-Based Document Chatbot")
 
@@ -70,6 +77,7 @@ if doc_file:
     chunks = split_text_into_chunks(text)
     embeddings, vectorizer = create_embeddings(chunks)
 
+    # Changing button color
     st.markdown("""
     <style>
     div.stButton > button:first-child {
@@ -77,7 +85,7 @@ if doc_file:
         color: white;
     }
     </style>
-""", unsafe_allow_html=True)
+     """, unsafe_allow_html=True)
 
     
     # Displaying chat history
@@ -99,3 +107,4 @@ if doc_file:
         else:
             st.warning("Please enter a valid query.")
             
+# --------------------------------------------------------------------------------------------------------
