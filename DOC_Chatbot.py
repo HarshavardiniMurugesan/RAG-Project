@@ -16,7 +16,10 @@ import streamlit as st
 
 # ---------------------------------CONFIGURATION USING GEMINI API-------------------------------------
 
-genai.configure(api_key="AIzaSyD0n9mntLuB_qFPZsbPaUB8Pry2OydswLU")
+#genai.configure(api_key="AIzaSyD0n9mntLuB_qFPZsbPaUB8Pry2OydswLU")
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+
+
 
 # -------------------------------------PDF TEXT EXTRACTION---------------------------------------------
 
