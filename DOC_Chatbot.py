@@ -56,7 +56,7 @@ def retrieve_relevant_chunk(query, chunks, vectorizer, embeddings):
 # ----------------------------------------GEMINI API CALL ----------------------------------------------
 
 def ask_gemini(query, context=""):
-    model = genai.GenerativeModel("gemini-1.5-pro")
+    model = genai.GenerativeModel("gemini-1.5-flash")
     response = model.generate_content(f"Context:\n{context}\n\nQuery:\n{query}\n\nProvide a structured response.")
     return response.text
 
