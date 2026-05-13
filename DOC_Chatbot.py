@@ -31,7 +31,7 @@ def extract_text_from_pdf(pdf_path):
 
 # ----------------------------------------TEXT CHUNKING -----------------------------------------------
 
-def split_text_into_chunks(text, chunk_size=500):
+def split_text_into_chunks(text, chunk_size=300):
     # Splits extracted text into manageable chunks for retrieval.
     words = text.split()
     return [" ".join(words[i:i + chunk_size]) for i in range(0, len(words), chunk_size)]
